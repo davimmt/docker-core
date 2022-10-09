@@ -21,12 +21,14 @@ antigen use oh-my-zsh
 # Set up plugins
 antigen bundle git
 antigen bundle dirhistory
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle dirhistory
 # Set up our preferred theme
-antigen theme spaceship-prompt/spaceship-prompt
+antigen theme romkatv/powerlevel10k
 # Run all that config
 antigen apply
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+source ${ZSH_CUSTOM}/plugins/kube-ps1/kube-ps1.sh
+PROMPT='$(kube_ps1)'$PROMPT
 
 # Set up Ctrl + Backspace and Ctrl + Del so you can move around and backspace faster (try it!)
 bindkey '^H' backward-kill-word
@@ -34,3 +36,6 @@ bindkey -M emacs '^[[3;5~' kill-word
 
 # Set up aliases
 source ~/.zprofile
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

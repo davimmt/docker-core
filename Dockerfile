@@ -43,27 +43,26 @@ RUN curl -sL https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_a
 RUN apk --no-cache add openssh git
 
 # Set up unprivileged user
-RUN adduser -D main
+RUN adduser -D main -s /bin/zsh
+WORKDIR /home/main
 # Set up ZSH and preferred terminal environment
 ENV ZSH_CUSTOM=/home/main/.oh-my-zsh/custom
 RUN apk --no-cache add zsh
-# RUN mkdir -p /home/main/.antigen
-# RUN curl -L git.io/antigen > /home/main/.antigen/antigen.zsh
-# COPY \.* /home/main/
-# RUN chown -R main:main /home/main/
+RUN git clone --single-branch --depth 1 https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM}/plugins/kube-ps1
 
-RUN su main sh -c "$(curl -SL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.3/zsh-in-docker.sh)" -- \
-    -t https://github.com/denysdovhan/spaceship-prompt \
-    -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
-    -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
-    -p git \
-    -p https://github.com/zsh-users/zsh-autosuggestions \
-    -p https://github.com/zsh-users/zsh-completions \
-    -p ssh-agent \
-    -p 'history-substring-search' \
-    -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
-    -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
+RUN apk --no-cache add msttcorefonts-installer fontconfig && \
+    update-ms-fonts && \
+    fc-cache -f
+COPY fonts/*.ttf .
+RUN mkdir -p /usr/share/fonts/truetype/firacode
+RUN install -m644 *.ttf /usr/share/fonts/truetype/firacode \
+    && rm -rf *.ttf \
+    && fc-cache -f -v
+
+RUN mkdir -p /home/main/.antigen
+RUN curl -L git.io/antigen > /home/main/.antigen/antigen.zsh
+COPY zsh/* /home/main/
+RUN chown -R main:main /home/main/
 
 USER main
-RUN mkdir /home/main/.ssh
 RUN /bin/zsh /home/main/.zshrc
