@@ -43,26 +43,33 @@ RUN curl -sL https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_a
 RUN apk --no-cache add openssh git
 
 # Set up unprivileged user
-RUN adduser -D main -s /bin/zsh
-WORKDIR /home/main
+ARG USER=main
+RUN adduser -D ${USER} -s /bin/zsh \
+    && mkdir -p /home/${USER}/.local/bin
+ENV PATH="${PATH}:/home/${USER}/.local/bin"
+WORKDIR /home/${USER}
 # Set up ZSH and preferred terminal environment
-ENV ZSH_CUSTOM=/home/main/.oh-my-zsh/custom
-RUN apk --no-cache add zsh
+ENV ZSH_CUSTOM=/home/${USER}/.oh-my-zsh/custom
+RUN apk --no-cache add zsh fzf bat perl bash tar make
+# kube-ps1
 RUN git clone --single-branch --depth 1 https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM}/plugins/kube-ps1
-
-RUN apk --no-cache add msttcorefonts-installer fontconfig && \
-    update-ms-fonts && \
-    fc-cache -f
-COPY fonts/*.ttf .
-RUN mkdir -p /usr/share/fonts/truetype/firacode
-RUN install -m644 *.ttf /usr/share/fonts/truetype/firacode \
-    && rm -rf *.ttf \
-    && fc-cache -f -v
-
-RUN mkdir -p /home/main/.antigen
-RUN curl -L git.io/antigen > /home/main/.antigen/antigen.zsh
-COPY zsh/* /home/main/
-RUN chown -R main:main /home/main/
-
-USER main
-RUN /bin/zsh /home/main/.zshrc
+# diff-so-fancy
+RUN git clone --single-branch --depth 1 https://github.com/so-fancy/diff-so-fancy.git \
+    && mv diff-so-fancy/diff-so-fancy /home/${USER}/.local/bin \
+    && mv diff-so-fancy/lib /home/${USER}/.local/bin \
+    && rm -rf diff-so-fancy \
+    && git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+# antigen
+RUN mkdir -p /home/${USER}/.antigen \
+    && curl -L git.io/antigen > /home/${USER}/.antigen/antigen.zsh
+# navi https://github.com/denisidoro/navi
+# RUN BIN_DIR=/home/${USER}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
+#       | sed -r "/^latest_version_released\(\) \{/,/^\}/clatest_version_released() { curl -s \'https://api.github.com/repos/denisidoro/navi/releases/latest' \
+#       | grep -Eo 'releases/tag/v([0-9\.]+)' | sed 's|releases/tag/v||'; }" \
+#       | sed -r "/^asset_url\(\) \{/,/^\}/s/local -r variant=.*//";)
+#     && rm -f navi.tar.gz
+    
+COPY zsh/* /home/${USER}/
+RUN chown -R ${USER}:${USER} /home/${USER}/
+USER ${USER}
+RUN /bin/zsh /home/${USER}/.zshrc

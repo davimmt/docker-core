@@ -20,7 +20,11 @@ setopt promptsubst
 antigen use oh-my-zsh
 # Set up plugins
 antigen bundle git
+antigen bundle copyfile
 antigen bundle dirhistory
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-syntax-highlighting
 # Set up our preferred theme
 antigen theme romkatv/powerlevel10k
 # Run all that config

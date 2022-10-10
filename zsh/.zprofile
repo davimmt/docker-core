@@ -3,6 +3,7 @@ alias cpf=copyfile
 
 alias vf='v $(fzf)'
 alias cf='cat $(fzf)'
+alias bf='bat $(fzf)'
 alias curlg="curl -sSL -o /dev/null -D - "
 curlt() {
     curl -w @- -o /dev/null -s "$@" <<'EOF'
