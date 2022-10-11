@@ -40,6 +40,9 @@ RUN curl -sL https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 
 RUN curl -sL https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_amd64 -o /usr/bin/yq && \
     chmod +x /usr/bin/yq
 
+RUN curl -sL https://get.helm.sh/helm-v3.10.0-linux-amd64.tar.gz -o /usr/bin/helm && \
+    chmod +x /usr/bin/helm
+
 RUN apk --no-cache add openssh git
 
 # Set up unprivileged user
@@ -50,7 +53,7 @@ ENV PATH="${PATH}:/home/${USER}/.local/bin"
 WORKDIR /home/${USER}
 # Set up ZSH and preferred terminal environment
 ENV ZSH_CUSTOM=/home/${USER}/.oh-my-zsh/custom
-RUN apk --no-cache add zsh fzf bat perl bash tar make
+RUN apk --no-cache add zsh fzf bat perl bash neovim
 # kube-ps1
 RUN git clone --single-branch --depth 1 https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM}/plugins/kube-ps1
 # diff-so-fancy
@@ -59,15 +62,16 @@ RUN git clone --single-branch --depth 1 https://github.com/so-fancy/diff-so-fanc
     && mv diff-so-fancy/lib /home/${USER}/.local/bin \
     && rm -rf diff-so-fancy \
     && git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+# vim-plug https://github.com/junegunn/vim-plug
+RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 # antigen
 RUN mkdir -p /home/${USER}/.antigen \
     && curl -L git.io/antigen > /home/${USER}/.antigen/antigen.zsh
 # navi https://github.com/denisidoro/navi
-# RUN BIN_DIR=/home/${USER}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
-#       | sed -r "/^latest_version_released\(\) \{/,/^\}/clatest_version_released() { curl -s \'https://api.github.com/repos/denisidoro/navi/releases/latest' \
-#       | grep -Eo 'releases/tag/v([0-9\.]+)' | sed 's|releases/tag/v||'; }" \
-#       | sed -r "/^asset_url\(\) \{/,/^\}/s/local -r variant=.*//";)
-#     && rm -f navi.tar.gz
+RUN BIN_DIR=/home/${USER}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
+        | sed -r '/asset_url\(\)/,/fi/casset_url() {\n   echo "https://github.com/denisidoro/navi/releases/download/v2.20.1/navi-v2.20.1-x86_64-unknown-linux-musl.tar.gz"') \
+    && rm -f navi.tar.gz
     
 COPY zsh/* /home/${USER}/
 RUN chown -R ${USER}:${USER} /home/${USER}/

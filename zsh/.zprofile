@@ -1,4 +1,4 @@
-alias v=vi
+alias v=nvim
 alias cpf=copyfile
 
 alias vf='v $(fzf)'

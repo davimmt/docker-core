@@ -43,3 +43,9 @@ source ~/.zprofile
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Enable navi shortcut
+eval "$(navi widget zsh)"
+
+# Remove less-like outputs
+export PAGER=""
