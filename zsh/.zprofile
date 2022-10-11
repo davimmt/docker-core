@@ -75,6 +75,7 @@ alias kdf="kubectl delete -f "
 alias kgaa="kubectl get all,ing,clusterrole,clusterrolebinding,secret,configmap -A"
 alias kgap="kubectl get po -A"
 
+alias kcu="aws eks update-kubeconfig --name "
 alias kcn="kubectl config set-context --current --namespace "
 alias kcc="kubectl config use-context "
 
