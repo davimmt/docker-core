@@ -83,10 +83,10 @@ RUN mkdir -p ${HOME}/.antigen \
 RUN BIN_DIR=${HOME}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
         | sed -r '/asset_url\(\)/,/fi/casset_url() {\n   echo "https://github.com/denisidoro/navi/releases/download/v2.20.1/navi-v2.20.1-x86_64-unknown-linux-musl.tar.gz"') \
     && rm -f navi.tar.gz
-    
-COPY zsh/* ${HOME}/
+
 COPY nvim ${HOME}/.config/nvim
+RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
+COPY zsh/* ${HOME}/
 RUN chown -R ${USER}:${USER} ${HOME}/
 USER ${USER}
-RUN nvim --headless +PlugInstall +qa
 RUN /bin/zsh ${HOME}/.zshrc
