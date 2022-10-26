@@ -1,9 +1,19 @@
-# Get kubectl binary
-FROM bitnami/kubectl:1.20.9 as kubectl
 FROM alpine:latest
 ENV RUNNING_IN_DOCKER true
-# Copying kubectl binary to current stage
-COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/
+
+# Installing Golang
+COPY --from=golang:1.18-alpine /usr/local/go/ /usr/local/go/
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+# Installing kubectl
+COPY --from=bitnami/kubectl:1.20.9 /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/
+
+# Installing Python
+RUN apk --update --no-cache add \
+    python3 \
+    && ln -sf python3 /usr/bin/python \
+    && python3 -m ensurepip \
+    && pip3 install --no-cache --upgrade pip setuptools
 
 # Install AWSCLIv2 with GLIBC
 # https://github.com/aws/aws-cli/issues/4685#issuecomment-615872019
@@ -47,33 +57,36 @@ RUN apk --no-cache add openssh git
 
 # Set up unprivileged user
 ARG USER=main
+ENV HOME=/home/${USER}
 RUN adduser -D ${USER} -s /bin/zsh \
     && mkdir -p /home/${USER}/.local/bin
 ENV PATH="${PATH}:/home/${USER}/.local/bin"
-WORKDIR /home/${USER}
+WORKDIR ${HOME}
 # Set up ZSH and preferred terminal environment
-ENV ZSH_CUSTOM=/home/${USER}/.oh-my-zsh/custom
+ENV ZSH_CUSTOM=${HOME}/.oh-my-zsh/custom
 RUN apk --no-cache add zsh fzf bat perl bash neovim
 # kube-ps1
-RUN git clone --single-branch --depth 1 https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM}/plugins/kube-ps1
+# RUN git clone --single-branch --depth 1 https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM}/plugins/kube-ps1
 # diff-so-fancy
 RUN git clone --single-branch --depth 1 https://github.com/so-fancy/diff-so-fancy.git \
-    && mv diff-so-fancy/diff-so-fancy /home/${USER}/.local/bin \
-    && mv diff-so-fancy/lib /home/${USER}/.local/bin \
+    && mv diff-so-fancy/diff-so-fancy ${HOME}/.local/bin \
+    && mv diff-so-fancy/lib ${HOME}/.local/bin \
     && rm -rf diff-so-fancy \
     && git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 # vim-plug https://github.com/junegunn/vim-plug
 RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 # antigen
-RUN mkdir -p /home/${USER}/.antigen \
-    && curl -L git.io/antigen > /home/${USER}/.antigen/antigen.zsh
+RUN mkdir -p ${HOME}/.antigen \
+    && curl -L git.io/antigen > ${HOME}/.antigen/antigen.zsh
 # navi https://github.com/denisidoro/navi
-RUN BIN_DIR=/home/${USER}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
+RUN BIN_DIR=${HOME}/.local/bin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install \
         | sed -r '/asset_url\(\)/,/fi/casset_url() {\n   echo "https://github.com/denisidoro/navi/releases/download/v2.20.1/navi-v2.20.1-x86_64-unknown-linux-musl.tar.gz"') \
     && rm -f navi.tar.gz
     
-COPY zsh/* /home/${USER}/
-RUN chown -R ${USER}:${USER} /home/${USER}/
+COPY zsh/* ${HOME}/
+COPY nvim ${HOME}/.config/nvim
+RUN chown -R ${USER}:${USER} ${HOME}/
 USER ${USER}
-RUN /bin/zsh /home/${USER}/.zshrc
+RUN nvim --headless +PlugInstall +qa
+RUN /bin/zsh ${HOME}/.zshrc

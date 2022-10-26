@@ -31,8 +31,10 @@ antigen theme romkatv/powerlevel10k
 antigen apply
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
-source ${ZSH_CUSTOM}/plugins/kube-ps1/kube-ps1.sh
-PROMPT='$(kube_ps1)'$PROMPT
+
+# kube-ps1
+# source ${ZSH_CUSTOM}/plugins/kube-ps1/kube-ps1.sh
+# PROMPT='$(kube_ps1)'$PROMPT
 
 # Set up Ctrl + Backspace and Ctrl + Del so you can move around and backspace faster (try it!)
 bindkey '^H' backward-kill-word
