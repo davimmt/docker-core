@@ -86,6 +86,7 @@ RUN BIN_DIR=${HOME}/.local/bin bash <(curl -sL https://raw.githubusercontent.com
 
 COPY nvim ${HOME}/.config/nvim
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
+RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 COPY zsh/* ${HOME}/
 RUN chown -R ${USER}:${USER} ${HOME}/
 USER ${USER}
