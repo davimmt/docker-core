@@ -41,6 +41,7 @@ RUN curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv
     /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
     /usr/local/aws-cli/v2/*/dist/awscli/examples
 
+# Session Manager Plugin
 RUN curl -sL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" \
  && dpkg -i session-manager-plugin.deb \
  && rm -rf session-manager-plugin.deb
