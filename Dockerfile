@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     zsh \
     fzf \
     bat \
+    telnet \
+    dnsutils \
     perl \
     bash \
     neovim \
@@ -91,6 +93,7 @@ RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/in
 COPY nvim ${HOME}/.config/nvim
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
+RUN mkdir -p ${HOME}/volumes
 COPY zsh/* ${HOME}/
 RUN chown -R ${USER}:${USER} ${HOME}/
 USER ${USER}
