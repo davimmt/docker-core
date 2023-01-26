@@ -2,6 +2,13 @@ FROM debian:stable-slim
 ENV RUNNING_IN_DOCKER true
 
 ARG USER=main
+# ARG GOLANG_VERSION=1.18-alpine
+# ARG KUBECTL_VERSION=1.20.9
+ARG JQ_VERSION=1.6
+ARG YQ_VERSION=4.2.0
+ARG HELM_VERSION=3.10.0
+ARG HELM_VERSION=3.10.0
+ARG TERRAFORM_VERSION=1.3.7
 
 # Installing Golang
 COPY --from=golang:1.18-alpine /usr/local/go/ /usr/local/go/
@@ -49,16 +56,20 @@ RUN curl -sL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/u
  && rm -rf session-manager-plugin.deb
 
 # jq
-RUN curl -sL https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o /usr/bin/jq \
+RUN curl -sL https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64 -o /usr/bin/jq \
  && chmod +x /usr/bin/jq
 
 # yq
-RUN curl -sL https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_amd64 -o /usr/bin/yq \
+RUN curl -sL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64 -o /usr/bin/yq \
  && chmod +x /usr/bin/yq
 
 # helm
-RUN curl -sL https://get.helm.sh/helm-v3.10.0-linux-amd64.tar.gz -o /usr/bin/helm \
+RUN curl -sL https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -o /usr/bin/helm \
  && chmod +x /usr/bin/helm
+
+# terraform
+RUN curl -sL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
+ && unzip -j terraform.zip terraform -d /usr/bin && chmod +x /usr/bin/terraform && rm -f terraform.zip
 
 # Set up unprivileged user
 ENV HOME=/home/${USER}
