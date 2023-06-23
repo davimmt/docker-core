@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/* \
  && ln -sf python3 /usr/bin/python
 
-RUN pip3 install --no-cache --upgrade pip setuptools
+# RUN pip3 install --no-cache --upgrade pip setuptools
 
 # AWSCLIv2
 RUN curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
@@ -101,7 +101,16 @@ RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/in
  && BIN_DIR=${HOME}/.local/bin bash navi.sh \
  && rm -rf navi.sh
 
-COPY nvim ${HOME}/.config/nvim
+# nvim
+RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
+ && chmod +x nvim.appimage \
+ && ./nvim.appimage --appimage-extract \
+ && mv squashfs-root/ ${HOME}/.nvim-appimage \
+ && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
+ && rm -f nvim.appimage
+
+#COPY nvim ${HOME}/.config/nvim
+RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 RUN mkdir -p ${HOME}/volumes
