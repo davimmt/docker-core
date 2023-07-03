@@ -34,10 +34,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     tar \
+    xclip \
  && rm -rf /var/lib/apt/lists/* \
  && ln -sf python3 /usr/bin/python
 
-# RUN pip3 install --no-cache --upgrade pip setuptools
+RUN pip3 install --no-cache --upgrade pip setuptools --break-system-packages
 
 # AWSCLIv2
 RUN curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
@@ -109,6 +110,9 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
  && rm -f nvim.appimage
 
+RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
+
+# more user profile config
 RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim
 COPY nvim/kickstart-nvim-lua-custom-plugins/*.lua ${HOME}/.config/nvim/lua/custom/plugins
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
