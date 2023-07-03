@@ -109,8 +109,8 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
  && rm -f nvim.appimage
 
-#COPY nvim ${HOME}/.config/nvim
 RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim
+COPY nvim/kickstart-nvim-lua-custom-plugins/*.lua ${HOME}/.config/nvim/lua/custom/plugins
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 RUN mkdir -p ${HOME}/volumes
