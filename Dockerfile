@@ -118,6 +118,7 @@ COPY nvim/kickstart-nvim-lua-custom-plugins/*.lua ${HOME}/.config/nvim/lua/custo
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 RUN mkdir -p ${HOME}/volumes
+RUN mkdir -p ${HOME}/.aws
 COPY zsh/* ${HOME}/
 RUN chown -R ${USER}:${USER} ${HOME}/
 USER ${USER}
