@@ -36,7 +36,7 @@ alias gdc='git add .; git commit -a -m "$(git rev-parse --abbrev-ref HEAD)"; git
 # AWS
 alias asa="export AWS_REGION=sa-east-1 AWS_DEFAULT_REGION=sa-east-1"
 alias aus="export AWS_REGION=us-east-1 AWS_DEFAULT_REGION=us-east-1"
-alias ssoenv="eval \"$(aws configure export-credentials --format env)\""
+alias ssoenv='eval "$(aws configure export-credentials --format env)"'
 alias aprd="export AWS_PROFILE=prd && asa && ssoenv"
 alias adev="export AWS_PROFILE=dev && aus && ssoenv"
 alias id="aws sts get-caller-identity"
