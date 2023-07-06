@@ -54,3 +54,6 @@ eval "$(navi widget zsh)"
 
 # Remove less-like outputs
 export PAGER=""
+
+# kubectl autocomplete
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
