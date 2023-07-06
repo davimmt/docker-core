@@ -1,6 +1,10 @@
 ```
 image_name=core
-true && docker build -t $image_name .; \
+
+# if changes where made
+docker build -t $image_name .
+
+# run container || if error (container already exists), exec into it || if error (container stopped), start it
 docker run \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
     -v "$HOME"/.aws:/home/main/.aws \
