@@ -65,8 +65,8 @@ RUN curl -sL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq
  && chmod +x /usr/bin/yq
 
 # helm
-RUN curl -sL https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -o /usr/bin/helm \
- && chmod +x /usr/bin/helm
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 \
+ && chmod +x get_helm.sh && ./get_helm.sh && chmod +x /usr/local/bin/helm && rm get_helm.sh
 
 # terraform
 RUN curl -sL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
