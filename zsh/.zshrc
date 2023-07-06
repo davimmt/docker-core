@@ -14,6 +14,9 @@ fi
 
 # Source Antigen
 source ~/.antigen/antigen.zsh
+# Configuring autocomplete
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#808080"
+autoload predict-on
 autoload -U colors && colors
 setopt promptsubst
 # Set up oh-my-zsh
