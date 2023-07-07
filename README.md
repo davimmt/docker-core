@@ -14,3 +14,21 @@ docker run \
 || docker exec -it $image_name /bin/zsh \
 || docker start -i $image_name
 ```
+
+This Dockerfile will build (in base debian) the following main assets (not exhaustive list), by default:
+- (bin) kubectl:1.20.9
+- (apt) zsh
+- (apt) neovim
+- (bin) awscliv2:latest
+- (bin) aws session manager plugin:latest
+- (bin) jq:1.6
+- (bin) yq:4.2.0
+- (bin) helm3:latest
+- (bin) terraform:1.3.7
+- (config/plugin) on-my-zsh
+- (config/plugin) antigen
+- (config/plugin) diff-so-fancy:master
+- (config/plugin) vim-plug:master
+- (bin) navi:master
+- (bin) nvim:stable
+- (config/plugin) nvim-lua-kickstart:master
