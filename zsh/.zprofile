@@ -24,14 +24,16 @@ b64d() { echo -e "$1" | base64 -d }
 
 # Git
 alias g='git '
-alias gpo='git pull origin '
-alias gcam='git add .; git commit -a -m '
 alias ga='git add '
 alias gp='git push origin "$(git rev-parse --abbrev-ref HEAD)"'
 alias gs='git status '
 alias gd='git diff '
+alias gl='git log '
+alias gr='git restore '
+alias gca='git add .; git commit -a -m '
 alias gpull='git pull --no-ff origin "$(git rev-parse --abbrev-ref HEAD)" --no-edit'
-alias gdc='git add .; git commit -a -m "$(git rev-parse --abbrev-ref HEAD)"; git push origin "$(git rev-parse --abbrev-ref HEAD)"'
+alias gbc='git add .; git commit -a -m "$(git rev-parse --abbrev-ref HEAD)"; git push origin "$(git rev-parse --abbrev-ref HEAD)"'
+gcp() { gca "$@"; gp }
 
 # AWS
 alias asa='export AWS_REGION=sa-east-1 AWS_DEFAULT_REGION=sa-east-1'
@@ -57,7 +59,7 @@ alias kgi='kubectl get ing '
 alias kgs='kubectl get svc '
 alias kgm='kubectl get configmap '
 alias kgn='kubectl get node '
-alias kgj='kubectl get jon '
+alias kgj='kubectl get job '
 
 alias kdp='kubectl describe po '
 alias kdn='kubectl describe node '
