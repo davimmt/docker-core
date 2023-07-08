@@ -33,7 +33,7 @@ alias gr='git restore '
 alias gca='git add .; git commit -a -m '
 alias gpull='git pull --no-ff origin "$(git rev-parse --abbrev-ref HEAD)" --no-edit'
 alias gbc='git add .; git commit -a -m "$(git rev-parse --abbrev-ref HEAD)"; git push origin "$(git rev-parse --abbrev-ref HEAD)"'
-unalias gcp # git cherry-pick
+unalias gcp 2> /dev/null || true # git cherry-pick
 gcp() { gca "$@"; gp }
 
 # AWS
