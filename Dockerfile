@@ -120,7 +120,12 @@ RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 RUN mkdir -p ${HOME}/volumes
 RUN mkdir -p ${HOME}/.aws
-COPY zsh/* ${HOME}/
+# instead of COPY zsh/* ${HOME}/, cloning so I can costumize and see the git diff from withing
+RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
+ && git config --global --add safe.directory ${HOME}/.docker-core \
+ && for file in $(ls -A ${HOME}/.docker-core/zsh); do \
+      ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
+    done
 RUN chown -R ${USER}:${USER} ${HOME}/
 
 # Clean apt package list
