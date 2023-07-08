@@ -29,6 +29,8 @@ RUN apt-get install -y \
     bat \
     telnet \
     dnsutils \
+    iproute2 \
+    procps \
     neovim \
     xclip
 
