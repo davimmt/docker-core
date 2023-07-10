@@ -103,6 +103,11 @@ RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/in
  && BIN_DIR=${HOME}/.local/bin bash navi.sh \
  && rm -rf navi.sh
 
+# lazygit
+RUN curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')_Linux_x86_64.tar.gz" \
+ && tar xf lazygit.tar.gz -C /usr/local/bin lazygit \
+ && rm -rf lazygit.tar.gz
+
 # nvim
 RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
  && chmod +x nvim.appimage \
@@ -110,23 +115,30 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && mv squashfs-root/ ${HOME}/.nvim-appimage \
  && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
  && rm -f nvim.appimage
-
 RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
-
-# more user profile config
-RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim \
+RUN git clone --single-branch --depth 1 https://github.com/AstroNvim/AstroNvim ${HOME}/.config/nvim \
  && git config --global --add safe.directory ${HOME}/.config/nvim
-COPY nvim/kickstart-nvim-lua-custom-plugins/*.lua ${HOME}/.config/nvim/lua/custom/plugins
-RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
-RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
-RUN mkdir -p ${HOME}/volumes
-RUN mkdir -p ${HOME}/.aws
+
 # instead of COPY zsh/* ${HOME}/, cloning so I can costumize and see the git diff from withing
 RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
  && git config --global --add safe.directory ${HOME}/.docker-core \
  && for file in $(ls -A ${HOME}/.docker-core/zsh); do \
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
+    done \
+ && for file in $(ls -A ${HOME}/.docker-core/nvim/astronvim/plugins/*.?*); do \
+      ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/.config/nvim/lua/plugins/$file; \
+    done \
+ && for file in $(ls -A ${HOME}/.docker-core/nvim/astronvim/plugins/configs); do \
+      ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/.config/nvim/lua/plugins/configs/$file; \
     done
+
+# init nvim config
+RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
+
+# creating some mounting dirs
+RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
+RUN mkdir -p ${HOME}/volumes
+RUN mkdir -p ${HOME}/.aws
 RUN chown -R ${USER}:${USER} ${HOME}/
 
 # Clean apt package list
