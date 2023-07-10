@@ -122,14 +122,9 @@ RUN git clone --single-branch --depth 1 https://github.com/AstroNvim/AstroNvim $
 # instead of COPY zsh/* ${HOME}/, cloning so I can costumize and see the git diff from withing
 RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
  && git config --global --add safe.directory ${HOME}/.docker-core \
+ && ln -sf ${HOME}/.docker-core/nvim/astronvim ${HOME}/.config/nvim/lua/user \
  && for file in $(ls -A ${HOME}/.docker-core/zsh); do \
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
-    done \
- && for file in $(ls -A ${HOME}/.docker-core/nvim/astronvim/plugins/*.?*); do \
-      ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/.config/nvim/lua/plugins/$file; \
-    done \
- && for file in $(ls -A ${HOME}/.docker-core/nvim/astronvim/plugins/configs); do \
-      ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/.config/nvim/lua/plugins/configs/$file; \
     done
 
 # init nvim config

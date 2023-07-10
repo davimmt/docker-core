@@ -15,7 +15,9 @@ docker run \
 || docker start -i $image_name
 ```
 
-This Dockerfile will build (in base debian) the following main assets (not exhaustive list), by default:
+This Dockerfile will build (in base debian) the following main assets (not
+exhaustive list), by default:
+
 - (bin) kubectl:1.20.9
 - (apt) zsh
 - (apt) neovim
@@ -31,4 +33,8 @@ This Dockerfile will build (in base debian) the following main assets (not exhau
 - (config/plugin) vim-plug:master
 - (bin) navi:master
 - (bin) nvim:stable
-- (config/plugin) nvim-lua-kickstart:master
+- (config/plugin) AstroNvim3:master
+
+I recommend downloading and using
+[this font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip)
+in your terminal so you can see all the pretty icons.
