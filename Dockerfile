@@ -114,7 +114,8 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
 RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
 
 # more user profile config
-RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim
+RUN git clone https://github.com/nvim-lua/kickstart.nvim ${HOME}/.config/nvim \
+ && git config --global --add safe.directory ${HOME}/.config/nvim
 COPY nvim/kickstart-nvim-lua-custom-plugins/*.lua ${HOME}/.config/nvim/lua/custom/plugins
 RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
@@ -129,8 +130,7 @@ RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core $
 RUN chown -R ${USER}:${USER} ${HOME}/
 
 # Clean apt package list
-RUN rm -rf /var/lib/apt/lists/* #\
- # && pip3 cache remove *
+RUN rm -rf /var/lib/apt/lists/*
 
 USER ${USER}
 RUN /bin/zsh ${HOME}/.zshrc
