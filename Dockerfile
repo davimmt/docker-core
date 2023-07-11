@@ -127,8 +127,10 @@ RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core $
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
     done
 
+# install lsp servers
+RUN sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
 # init nvim config
-RUN sh -c 'nvim --headless +PlugInstall +qa' ${USER}
+# RUN sh -c 'nvim  --headless -c 'quitall'' ${USER}
 
 # creating some mounting dirs
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
