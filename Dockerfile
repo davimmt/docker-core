@@ -119,6 +119,7 @@ RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
 RUN git clone --single-branch --depth 1 https://github.com/AstroNvim/AstroNvim ${HOME}/.config/nvim \
  && git config --global --add safe.directory ${HOME}/.config/nvim
 
+ARG CACHEBUST 1
 # instead of COPY zsh/* ${HOME}/, cloning so I can costumize and see the git diff from withing
 RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
  && git config --global --add safe.directory ${HOME}/.docker-core \
@@ -127,10 +128,10 @@ RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core $
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
     done
 
+# init nvim config
+RUN sh -c 'nvim  --headless -c 'quitall'' ${USER}
 # install lsp servers
 RUN sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
-# init nvim config
-# RUN sh -c 'nvim  --headless -c 'quitall'' ${USER}
 
 # creating some mounting dirs
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh

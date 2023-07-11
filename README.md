@@ -1,8 +1,8 @@
-```
+```bash
 image_name=core
 
 # if changes where made
-docker build -t $image_name .
+docker build -t $image_name --build-arg CACHEBUST=$(date +%s) .
 
 # run container || if error (container already exists), exec into it || if error (container stopped), start it
 docker run \
