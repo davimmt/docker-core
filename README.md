@@ -6,6 +6,7 @@ docker build -t $image_name --build-arg CACHEBUST=$(date +%s) .
 
 # run container || if error (container already exists), exec into it || if error (container stopped), start it
 docker run \
+    -v "$HOME"/.kube:/home/main/.kube \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
     -v "$HOME"/.aws:/home/main/.aws \
     -v "$HOME"/.ssh:/home/main/.ssh \
