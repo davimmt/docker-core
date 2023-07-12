@@ -38,7 +38,6 @@ lvim.plugins = {
 
 	"kdheepak/lazygit.nvim",
 	"f-person/git-blame.nvim",
-	"Shatur/neovim-session-manager",
 
 	{
 		"folke/persistence.nvim",
