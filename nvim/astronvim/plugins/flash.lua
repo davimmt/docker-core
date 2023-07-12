@@ -1,17 +1,4 @@
 return {
-	"tpope/vim-fugitive",
-	"tpope/vim-surround",
-	"hashivim/vim-terraform",
-
-	{ "mg979/vim-visual-multi", branch = "master" },
-
-	{
-		"kdheepak/lazygit.nvim",
-		-- optional for floating window border decoration
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-	},
 	{
 		"folke/flash.nvim",
 		event = "VeryLazy",
