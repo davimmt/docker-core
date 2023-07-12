@@ -1,3 +1,19 @@
+local prayers = {
+  {
+    "   Santo Deus, Santo Forte,",
+    "        Santo Imortal,",
+    "     tem piedade de nós.",
+  },
+  {
+    "Jesus Cristo, Filho de Deus,",
+    "tem piedade de mim, pecador."
+  },
+  {
+    "   Santíssima Mãe de Deus,",
+    "          salva-nos!"
+  },
+}
+
 lvim.builtin.alpha.dashboard.section.header.val = {
 	"",
 	"",
@@ -23,10 +39,19 @@ lvim.builtin.alpha.dashboard.section.header.val = {
 	"           ███████",
 	"             ███",
 	"",
-	"   Santo Deus, Santo Forte,",
-	"        Santo Imortal,",
-	"     tem piedade de nós.",
 }
+
+-- http://lua-users.org/wiki/MathLibraryTutorial
+math.randomseed(os.time())
+math.random(); math.random(); math.random()
+
+local prayers_index = math.random(#prayers)
+for i=1, #prayers[prayers_index] do
+  table.insert(
+    lvim.builtin.alpha.dashboard.section.header.val,
+    prayers[prayers_index][i]
+  )
+end
 
 table.insert(
 	lvim.builtin.alpha.dashboard.section.buttons.entries,
