@@ -124,6 +124,8 @@ ARG CACHEBUST 1
 RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
  && git config --global --add safe.directory ${HOME}/.docker-core \
  && ln -sf ${HOME}/.docker-core/nvim/astronvim ${HOME}/.config/nvim/lua/user \
+ && mkdir -p ${HOME}/.config/lvim \
+  && ln -sf ${HOME}/.docker-core/lunarvim/config.lua ${HOME}/.config/lvim/config.lua \
  && for file in $(ls -A ${HOME}/.docker-core/zsh); do \
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
     done
