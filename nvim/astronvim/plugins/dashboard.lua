@@ -17,7 +17,6 @@ local cross = {
 	"             ███",
 	"           ███████",
 	"             ███",
-	"",
 }
 
 local prayers = {
@@ -57,6 +56,7 @@ math.random()
 math.random()
 math.random()
 
+table.insert(cross, "")
 local prayers_index = math.random(#prayers)
 for i = 1, #prayers[prayers_index] do
 	table.insert(cross, prayers[prayers_index][i])
@@ -67,6 +67,7 @@ return {
 		"goolord/alpha-nvim",
 		opts = function(_, opts)
 			opts.section.header.val = cross
+			opts.config.layout[1].val = 2
 			opts.config.layout[3].val = 2
 		end,
 	},
