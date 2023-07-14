@@ -90,9 +90,11 @@ RUN git clone --single-branch --depth 1 https://github.com/so-fancy/diff-so-fanc
  && rm -rf diff-so-fancy \
  && git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 
+## START ! BYOC ##
 # vim-plug https://github.com/junegunn/vim-plug
 RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+## END ! BYOC ##
 
 # antigen
 RUN mkdir -p ${HOME}/.antigen \
@@ -116,11 +118,13 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
  && rm -f nvim.appimage
 RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
+## START ! BYOC ##
 RUN git clone --single-branch --depth 1 https://github.com/AstroNvim/AstroNvim ${HOME}/.config/nvim \
  && git config --global --add safe.directory ${HOME}/.config/nvim
+## END ! BYOC ##
 
+## START ! BYOC ##
 ARG CACHEBUST 1
-# instead of COPY zsh/* ${HOME}/, cloning so I can costumize and see the git diff from withing
 RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core ${HOME}/.docker-core \
  && git config --global --add safe.directory ${HOME}/.docker-core \
  && ln -sf ${HOME}/.docker-core/nvim/astronvim ${HOME}/.config/nvim/lua/user \
@@ -129,15 +133,18 @@ RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core $
  && for file in $(ls -A ${HOME}/.docker-core/zsh); do \
       ln -sf ${HOME}/.docker-core/zsh/$file ${HOME}/$file; \
     done
+## END ! BYOC ##
 
+## START ! BYOC ##
 # init nvim config
 RUN sh -c 'nvim --headless -c 'quitall'' ${USER}
 # install lsp servers
 RUN sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
+## END ! BYOC ##
 
 # creating some mounting dirs
 RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
-RUN mkdir -p ${HOME}/volumes
+RUN mkdir -p ${HOME}/.mnt
 RUN mkdir -p ${HOME}/.aws
 RUN chown -R ${USER}:${USER} ${HOME}/
 
@@ -145,4 +152,6 @@ RUN chown -R ${USER}:${USER} ${HOME}/
 RUN rm -rf /var/lib/apt/lists/*
 
 USER ${USER}
+## START ! BYOC ##
 RUN /bin/zsh ${HOME}/.zshrc
+## END ! BYOC ##

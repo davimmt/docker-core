@@ -22,22 +22,34 @@ I recommend downloading and using
 [this font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip)
 in your terminal so you can see all the pretty icons.
 
-You have two options of methods: Dockerfile and Dockerfile.confless
+You have two methods to work with this repo: MANAGED or BYOC (Bring Your Own
+Configuration):
 
-### Using Dockerfile.confless
-
-You will mount your own configurations (I like this method better).
+- In BYOC, you will mount your own configurations (I like this method better).
+- In MANAGED, the configurations defined in the repo will be git cloned to
+  /home/.docker-core and sys-linked inside the container.
 
 ```bash
+# 1. Clone this repo
 git clone --single-branch --depth 1 https://github.com/davimmt/docker-core.git
+
+# 2. Go into its dir
 cd docker-core
 
-# build docker image 
-image_name=core-confless
-docker build -t $image_name -f Dockerfile.confless .
+# 2.1 (Optional) If you choose BYOC method
+## Clean your Dockerfile by removing the aread marked as '## START ! BYOC ##' and '## END ! BYOC ##'
+## You can do it manually or use sed
+sed -i '/## START ! BYOC ##/,/## END ! BYOC ##/d' Dockerfile
 
-# change it temporarily
-# so that your nvim config will auto run at init
+# 3. Define image name var
+image_name=core
+
+# 4. Build docker image 
+docker build -t $image_name .
+
+# 4.1 (Optional) If you choose BYOC method
+## Change zsh config file temporarily
+## so that your nvim config will auto run at init
 cat <<'EOF' >> nvim/.zshrc
 ## BEGIN TMP ##
 # init nvim config
@@ -47,9 +59,11 @@ sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
 ## END TMP ##
 EOF
 
-# run container 
-# || if error (container already exists), exec into it 
-# || if error (container stopped), start and exec into it
+# NOTE
+# You can user /home/main/.mnt as entrypoint for you shared dir/files, e.g:
+# -v /path/to/your/shared-dir:/home/main/.mnt/shared-dir
+
+# 5.1 (BYOC) Run container 
 docker run \
     -v "$HOME"/.config/:/home/main/.config \
     -v "$HOME"/.local/share:/home/main/.local/share \
@@ -62,42 +76,19 @@ docker run \
     -v "$(pwd)"/zsh/.zprofile:/home/main/.zprofile \
     -v "$(pwd)"/zsh/.zshrc:/home/main/.zshrc \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
-    # you can user /home/main/.mnt as entrypoint 
-    # -v /path/to/your/dir:/home/main/.mnt/dir \
---name $image_name -it $image_name /bin/zsh \
-|| docker exec -it $image_name /bin/zsh \
-|| docker start -i $image_name
-```
+--name $image_name -it $image_name /bin/zsh
 
-### Using Dockerfile
-
-The configurations defined in the repo will be git cloned and sys-linked inside
-the container.
-
-```bash
-git clone --single-branch --depth 1 https://github.com/davimmt/docker-core.git
-cd docker-core
-
-# define docker image name
-image_name=core
-
-# build the image
-## the build-arg CACHEBUST is a workaround so that Docker will
-## always clone the newest version of git repos
-docker build -t $image_name --build-arg CACHEBUST=$(date +%s) .
-
-# run container 
-# || if error (container already exists), exec into it 
-# || if error (container stopped), start and exec into it
+# 5.2 (MANAGED) Run container 
 docker run \
     -v "$HOME"/.kube:/home/main/.kube \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
     -v "$HOME"/.aws:/home/main/.aws \
     -v "$HOME"/.ssh:/home/main/.ssh \
---name $image_name -it $image_name /bin/zsh \
-|| docker exec -it $image_name /bin/zsh \
-|| docker start -i $image_name
+--name $image_name -it $image_name /bin/zsh
 
-# you can user "$HOME"/.mnt as entrypoint
-# -v /path/to/your/dir:/home/main/.mnt/dir
+# NOTE
+# If the container ir already running, you can:
+# docker exec -it $image_name /bin/zsh
+# And if its stopped, you can:
+# docker start -i $image_name
 ```
