@@ -13,10 +13,10 @@ exhaustive list), by default:
 - (config/plugin) on-my-zsh
 - (config/plugin) antigen
 - (config/plugin) diff-so-fancy:master
-- (config/plugin) vim-plug:master (not at confless)
+- (config/plugin) vim-plug:master (not at BYOC)
 - (bin) navi:master
 - (bin) nvim:stable
-- (config/plugin) AstroNvim3:master (not at confless)
+- (config/plugin) AstroNvim3:master (not at BYOC)
 
 I recommend downloading and using
 [this font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip)
