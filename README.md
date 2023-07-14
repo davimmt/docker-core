@@ -50,7 +50,7 @@ docker build -t $image_name .
 # 4.1 (Optional) If you choose BYOC method
 ## Change zsh config file temporarily
 ## so that your nvim config will auto run at init
-cat <<'EOF' >> nvim/.zshrc
+cat <<'EOF' >> zsh/.zshrc
 ## BEGIN TMP ##
 # init nvim config
 sh -c 'nvim --headless -c 'quitall'' ${USER}
