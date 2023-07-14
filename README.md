@@ -90,9 +90,9 @@ docker run \
     -v "$HOME"/.ssh:/home/main/.ssh \
     -v "$HOME"/.aws:/home/main/.aws \
     -v "$HOME"/.kube:/home/main/.kube \
-    -v "$(pwd)/zsh/.p10k.zsh:/home/main/.p10k.zsh \
-    -v "$(pwd)/zsh/.zprofile:/home/main/.zprofile \
-    -v "$(pwd)/zsh/.zshrc:/home/main/.zshrc \
+    -v "$(pwd)"/zsh/.p10k.zsh:/home/main/.p10k.zsh \
+    -v "$(pwd)"/zsh/.zprofile:/home/main/.zprofile \
+    -v "$(pwd)"/zsh/.zshrc:/home/main/.zshrc \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
 --name $image_name -it $image_name /bin/zsh \
 || docker exec -it $image_name /bin/zsh \
