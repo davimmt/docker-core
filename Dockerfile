@@ -131,7 +131,7 @@ RUN git clone --single-branch --depth 1 https://github.com/davimmt/docker-core $
     done
 
 # init nvim config
-RUN sh -c 'nvim  --headless -c 'quitall'' ${USER}
+RUN sh -c 'nvim --headless -c 'quitall'' ${USER}
 # install lsp servers
 RUN sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
 
