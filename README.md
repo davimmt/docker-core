@@ -52,10 +52,15 @@ docker build -t $image_name .
 ## so that your nvim config will auto run at init
 cat <<'EOF' >> zsh/.zshrc
 ## BEGIN TMP ##
-# init nvim config
-sh -c 'nvim --headless -c 'quitall'' ${USER}
-# install lsp servers
-sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
+lock_file=~/.docker-core.zshrc.init
+if [[ ! -f "$lock_file" ]]; then
+  # init nvim config
+  sh -c 'nvim --headless -c 'quitall'' ${USER}
+  # install lsp servers
+  sh -c 'nvim --headless +"LspInstall terraformls tflint" +qa' ${USER}
+  # create lock file
+  touch $lock_file
+fi
 ## END TMP ##
 EOF
 
@@ -77,6 +82,10 @@ docker run \
     -v "$(pwd)"/zsh/.zshrc:/home/main/.zshrc \
     -v "$HOME"/.zsh_history:/home/main/.zsh_history \
 --name $image_name -it $image_name /bin/zsh
+
+# 5.1.1 (Optional) If you've ran 4.1, clean your .zshrc after first init
+## not using sed -i to prevent resource/device busy errors
+echo -e "$(sed '/## BEGIN TMP ##/,/## END TMP ##/d' ~/.zshrc)" > ~/.zshrc
 
 # 5.2 (MANAGED) Run container 
 docker run \
