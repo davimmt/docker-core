@@ -21,14 +21,15 @@ return {
 				end,
 				desc = "Flash",
 			},
-			{
-				"S",
-				mode = { "n", "o", "x" },
-				function()
-					require("flash").treesitter()
-				end,
-				desc = "Flash Treesitter",
-			},
+			-- conflict with vim-surround visual-mode S
+			-- {
+			-- 	"S",
+			-- 	mode = { "n", "o", "x" },
+			-- 	function()
+			-- 		require("flash").treesitter()
+			-- 	end,
+			-- 	desc = "Flash Treesitter",
+			-- },
 			{
 				"r",
 				mode = "o",
