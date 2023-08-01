@@ -50,27 +50,36 @@ local plugins = {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VimEnter',
     config = function()
+      local icon = require "custom.utils.icons"
       local prayer = require "custom.utils.prayers"
+      table.insert(icon, 1, '')
+      table.insert(icon, '')
       table.insert(prayer, 1, '')
       table.insert(prayer, 1, '')
       require('dashboard').setup {
         theme = 'hyper',
         shortcut_type = 'number',
         change_to_vcs_root = true,
+        disable_move = true,
         hide = {
           tabline = true,
           winbar  = true,
         },
         config = {
-          packages = { enable = true },
+          header = icon,
+          packages = { enable = false },
+          disable_move = true,
           week_header = {
-           enable = true,
+            enable = false,
+            concat = "",
+            append = {""},
           },
           shortcut = {
-            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+            { desc = '󰊳 Lazy', group = '@property', action = 'Lazy', key = 'L' },
             { desc = ' Session', group = 'Label', action = 'SessionManager load_last_session', key = 's' },
             { desc = ' Files', group = 'Label', action = 'Telescope find_files',  key = 'f', },
           },
+          mru = { limit = 5, },
           footer = prayer
         }
       }
@@ -80,30 +89,49 @@ local plugins = {
   --   "goolord/alpha-nvim",
   --   event = "VimEnter",
   --   cmd = "Alpha",
-  --   opts = function()
+  --   config = function ()
+  --     local alpha = require'alpha'
+  --     local startify = require'alpha.themes.startify'
   --     local icon = require "custom.utils.icons"
-  --     local dashboard = require "alpha.themes.dashboard"
-  --     dashboard.section.header.val = icon
-  --     dashboard.section.header.opts.hl = "DashboardHeader"
-  --
-  --     dashboard.config.layout[1].val = 1 -- vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.2) }
-  --     dashboard.config.layout[3].val = 2
-  --     dashboard.config.opts.noautocmd = true
-  --     return dashboard
-  --   end,
-  --   config = function(_, opts)
   --     local prayer = require "custom.utils.prayers"
-  --     require("alpha").setup(opts.config)
+  --     startify.section.header.val = icon
+  --     startify.section.top_buttons.val = {
+  --       startify.button("f", "  Find files" , ":Telescope find_files<CR>"),
+  --       startify.button("s", " Load Last Session" , ":SessionManager load_last_session<CR>"),
+  --     }
+  --     startify.section.bottom_buttons.val = {
+  --       startify.button("q", "󰅚  Quit NVIM" , ":qa<CR>"),
+  --     }
+  --     startify.section.footer.val = {
+  --       { type = "text", val = prayer },
+  --     }
   --
-  --     vim.api.nvim_create_autocmd("User", {
-  --       once = true,
-  --       callback = function()
-  --         -- table.insert(prayer, 1, "")
-  --         opts.section.footer.val = prayer
-  --         pcall(vim.cmd.AlphaRedraw)
-  --       end,
-  --     })
-  --   end,
+  --     alpha.setup(startify.config)
+  --   end
+  --   -- opts = function()
+  --   --   local icon = require "custom.utils.icons"
+  --   --   local dashboard = require "alpha.themes.startify"
+  --   --   dashboard.section.header.val = icon
+  --   --   dashboard.section.header.opts.hl = "DashboardHeader"
+  --   --
+  --   --   dashboard.config.layout[1].val = 1 -- vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.2) }
+  --   --   dashboard.config.layout[3].val = 2
+  --   --   dashboard.config.opts.noautocmd = true
+  --   --   return dashboard
+  --   -- end,
+  --   -- config = function(_, opts)
+  --   --   local prayer = require "custom.utils.prayers"
+  --   --   require("alpha").setup(opts.config)
+  --   --
+  --   --   vim.api.nvim_create_autocmd("User", {
+  --   --     once = true,
+  --   --     callback = function()
+  --   --       -- table.insert(prayer, 1, "")
+  --   --       opts.section.footer.val = prayer
+  --   --       pcall(vim.cmd.AlphaRedraw)
+  --   --     end,
+  --   --   })
+  --   -- end,
   -- },
 }
 
