@@ -68,7 +68,7 @@ local plugins = {
         config = {
           header = icon,
           packages = { enable = false },
-          disable_move = true,
+          disable_move = false,
           week_header = {
             enable = false,
             concat = "",
@@ -79,6 +79,7 @@ local plugins = {
             { desc = ' Session', group = 'Label', action = 'SessionManager load_last_session', key = 's' },
             { desc = ' Files', group = 'Label', action = 'Telescope find_files',  key = 'f', },
           },
+          project = { enable = true, limit = 3, },
           mru = { limit = 5, },
           footer = prayer
         }
