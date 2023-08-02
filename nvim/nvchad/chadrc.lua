@@ -4,7 +4,8 @@ M.mappings = require "custom.mappings"
 M.plugins = "custom.plugins"
 
 M.ui = {
-  theme = 'catppuccin',
+  theme = 'nightowl',
+  theme_toggle = {'catppuccin', 'nightowl'}
 }
 
 M.nvimtree = {

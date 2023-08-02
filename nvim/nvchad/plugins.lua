@@ -1,12 +1,12 @@
 local plugins = {
-	-- { "hashivim/vim-terraform", ft = { "tf", "terraform" } },
+	{ "hashivim/vim-terraform", ft = { "tf", "terraform" } },
 	{ "tpope/vim-fugitive", event = "VeryLazy" },
 	{ "tpope/vim-surround", event = "VeryLazy" },
 	{ "neoclide/coc.nvim", branch = "release", ft = {"tf", "terraform"} },
 	{ "juliosueiras/vim-terraform-completion", ft = {"tf", "terraform"} },
 	{ "kdheepak/lazygit.nvim", event = "VeryLazy", dependencies = {"nvim-lua/plenary.nvim"} },
   {
-    "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", event = "VeryLazy",
+    "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", lazy = true, -- event = "VeryLazy",
     config = function()
       return require "custom.configs.nvim-treesitter"
     end,
@@ -18,13 +18,13 @@ local plugins = {
     end,
   },
   {
-    "neovim/nvim-lspconfig", ft = {"tf", "terraform"}, event = "VeryLazy",
+    "neovim/nvim-lspconfig", ft = {"tf", "terraform"}, -- event = "VeryLazy",
     config = function()
       return require "custom.configs.nvim-lspconfig"
     end,
   },
   {
-  "jose-elias-alvarez/null-ls.nvim", ft = {"tf", "terraform"}, event = "VeryLazy",
+  "jose-elias-alvarez/null-ls.nvim", ft = {"tf", "terraform"}, -- event = "VeryLazy",
     opts = function()
       return require "custom.configs.null-ls"
     end,
