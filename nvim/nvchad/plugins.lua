@@ -2,8 +2,8 @@ local plugins = {
 	-- { "hashivim/vim-terraform", ft = { "tf", "terraform" } },
 	{ "tpope/vim-fugitive", event = "VeryLazy" },
 	{ "tpope/vim-surround", event = "VeryLazy" },
-	{ "neoclide/coc.nvim", branch = "release", event = "VeryLazy" },
-	{ "juliosueiras/vim-terraform-completion", event = "VeryLazy" },
+	{ "neoclide/coc.nvim", branch = "release", ft = {"tf", "terraform"} },
+	{ "juliosueiras/vim-terraform-completion", ft = {"tf", "terraform"} },
 	{ "kdheepak/lazygit.nvim", event = "VeryLazy", dependencies = {"nvim-lua/plenary.nvim"} },
   {
     "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", event = "VeryLazy",
@@ -12,19 +12,19 @@ local plugins = {
     end,
   },
   {
-    "williamboman/mason.nvim", build = ":MasonInstallAll",
+    "williamboman/mason.nvim", ft = {"tf", "terraform"}, build = ":MasonInstallAll",
     opts = function()
       return require "custom.configs.mason"
     end,
   },
   {
-    "neovim/nvim-lspconfig", event = "VeryLazy",
+    "neovim/nvim-lspconfig", ft = {"tf", "terraform"}, event = "VeryLazy",
     config = function()
       return require "custom.configs.nvim-lspconfig"
     end,
   },
   {
-  "jose-elias-alvarez/null-ls.nvim", ft = "tf", event = "VeryLazy",
+  "jose-elias-alvarez/null-ls.nvim", ft = {"tf", "terraform"}, event = "VeryLazy",
     opts = function()
       return require "custom.configs.null-ls"
     end,
@@ -44,7 +44,7 @@ local plugins = {
 		},
 	},
   {
-    "folke/flash.nvim", event = "VeryLazy",
+    "folke/flash.nvim", -- event = "VeryLazy",
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
       { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
@@ -65,12 +65,12 @@ local plugins = {
       return require "custom.configs.dashboard-nvim"
     end,
   },
-  {
-    "goolord/alpha-nvim", event = "VimEnter", cmd = "Alpha",
-    config = function ()
-      return require "custom.configs.alpha-nvim"
-    end
-  },
+  -- {
+  --   "goolord/alpha-nvim", event = "VimEnter", cmd = "Alpha",
+  --   config = function ()
+  --     return require "custom.configs.alpha-nvim"
+  --   end
+  -- },
 }
 
 return plugins
