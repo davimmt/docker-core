@@ -25,6 +25,7 @@ How to
 # 1. Clone these repo
 git clone --single-branch --depth 1 https://github.com/davimmt/docker-core "$(pwd)"/docker-core
 git clone --single-branch --depth 1 https://github.com/davimmt/dotfiles "$(pwd)"/dotfiles
+git clone --single-branch --depth 1 https://github.com/NvChad/NvChad "$(pwd)"/nvchad
 
 # 2. Go into its dir
 cd docker-core
@@ -39,16 +40,13 @@ docker build -t $image_name .
 # You can user /home/main/.mnt as entrypoint for you shared dir/files, e.g:
 # -v /path/to/your/shared-dir:/home/main/.mnt/shared-dir
 
-# 5. To configure NVim, you can see more at `cat "$(pwd)"/../dotfiles/README.md`. I like NvChad, so [installing it](https://nvchad.com/docs/quickstart/install).
-git clone --single-branch --depth 1 https://github.com/NvChad/NvChad ~/.config/nvim
-
-# 6. Run container (choose to mount whatever you want as your dotfiles, I like this)
+# 5. Run container (choose to mount whatever you want as your dotfiles, I like this)
 docker run \
+    -v "$(pwd)"/../nvchad/:/home/main/.config/nvim \
     -v "$(pwd)"/../dotfiles/nvim/nvchad:/home/main/.config/nvim/lua/custom \
     -v "$(pwd)"/../dotfiles/zsh/.p10k.zsh:/home/main/.p10k.zsh \
     -v "$(pwd)"/../dotfiles/zsh/.zprofile:/home/main/.zprofile \
     -v "$(pwd)"/../dotfiles/zsh/.zshrc:/home/main/.zshrc \
-    -v "$HOME"/.config/:/home/main/.config \
     -v "$HOME"/.local/share:/home/main/.local/share \
     -v "$HOME"/.local/state:/home/main/.local/state \
     -v "$HOME"/.ssh:/home/main/.ssh \
