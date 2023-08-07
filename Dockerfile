@@ -102,7 +102,7 @@ RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/in
 # lazygit
 RUN curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')_Linux_x86_64.tar.gz" \
  && tar xf lazygit.tar.gz -C /usr/local/bin lazygit \
- && rm -rf lazygit.tar.gz
+ && rm -f lazygit.tar.gz
 
 # nvim
 RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
@@ -113,10 +113,13 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && rm -f nvim.appimage
 RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
 
+# terraform-lsp
+ARG TERRAFORM_LSP_VERSION=0.0.12
+RUN curl -sL https://github.com/juliosueiras/terraform-lsp/releases/download/v${TERRAFORM_LSP_VERSION}/terraform-lsp_${TERRAFORM_LSP_VERSION}_linux_amd64.tar.gz -o terraformlsp.tar.gz \
+  && tar xf terraformlsp.tar.gz -C /usr/local/bin terraform-lsp \
+  && rm -f terraformlsp.tar.gz
+
 # creating some mounting dirs
-RUN mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
-RUN mkdir -p ${HOME}/.mnt
-RUN mkdir -p ${HOME}/.aws
 RUN chown -R ${USER}:${USER} ${HOME}/
 
 # Clean apt package list

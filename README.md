@@ -36,10 +36,6 @@ image_name=core
 # 4. Build docker image 
 docker build -t $image_name .
 
-# NOTE
-# You can user /home/main/.mnt as entrypoint for you shared dir/files, e.g:
-# -v /path/to/your/shared-dir:/home/main/.mnt/shared-dir
-
 # 5. Run container (choose to mount whatever you want as your dotfiles, I like this)
 docker run \
     -v "$(pwd)"/../nvchad/:/home/main/.config/nvim \
