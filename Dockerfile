@@ -72,6 +72,11 @@ ARG TERRAFORM_VERSION=1.3.7
 RUN curl -sL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
  && unzip -j terraform.zip terraform -d /usr/bin && chmod +x /usr/bin/terraform && rm -f terraform.zip
 
+# terragrunt
+ARG TERRAGRUNT_VERSION=0.50.6
+RUN curl -sL https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 -o /usr/bin/terragrunt \
+ && chmod +x /usr/bin/terragrunt
+
 # Set up unprivileged user
 ARG USER=main
 ENV HOME=/home/${USER}
@@ -87,8 +92,7 @@ ENV ZSH_CUSTOM=${HOME}/.oh-my-zsh/custom
 RUN git clone --single-branch --depth 1 https://github.com/so-fancy/diff-so-fancy.git \
  && mv diff-so-fancy/diff-so-fancy ${HOME}/.local/bin \
  && mv diff-so-fancy/lib ${HOME}/.local/bin \
- && rm -rf diff-so-fancy \
- && git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+ && rm -rf diff-so-fancy
 
 # antigen
 RUN mkdir -p ${HOME}/.antigen \
@@ -97,7 +101,8 @@ RUN mkdir -p ${HOME}/.antigen \
 # navi https://github.com/denisidoro/navi
 RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install -o navi.sh \
  && BIN_DIR=${HOME}/.local/bin bash navi.sh \
- && rm -rf navi.sh
+ && rm -rf navi.sh \
+ && git clone --single-branch --depth 1 "https://github.com/davimmt/navi-cheats" "$(navi info cheats-path)/davimmt__navi-cheats"
 
 # lazygit
 RUN curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')_Linux_x86_64.tar.gz" \
@@ -112,12 +117,6 @@ RUN curl -sLO https://github.com/neovim/neovim/releases/download/stable/nvim.app
  && ln -fs ${HOME}/.nvim-appimage/AppRun /usr/bin/nvim \
  && rm -f nvim.appimage
 RUN pip3 install --no-cache pyvim pynvim pyx --break-system-packages
-
-# terraform-lsp
-ARG TERRAFORM_LSP_VERSION=0.0.12
-RUN curl -sL https://github.com/juliosueiras/terraform-lsp/releases/download/v${TERRAFORM_LSP_VERSION}/terraform-lsp_${TERRAFORM_LSP_VERSION}_linux_amd64.tar.gz -o terraformlsp.tar.gz \
-  && tar xf terraformlsp.tar.gz -C /usr/local/bin terraform-lsp \
-  && rm -f terraformlsp.tar.gz
 
 # creating some mounting dirs
 RUN chown -R ${USER}:${USER} ${HOME}/
