@@ -105,7 +105,7 @@ RUN curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/in
  && git clone --single-branch --depth 1 "https://github.com/davimmt/navi-cheats" "$(navi info cheats-path)/davimmt__navi-cheats"
 
 # lazygit
-RUN curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')_Linux_x86_64.tar.gz" \
+RUN curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": \"v\K[0-9.]+')_Linux_x86_64.tar.gz" \
  && tar xf lazygit.tar.gz -C /usr/local/bin lazygit \
  && rm -f lazygit.tar.gz
 
